@@ -1,8 +1,9 @@
 #include <boost/lockfree/spsc_queue.hpp> // ring buffer
-//libs/lockfree/include/
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/allocators/allocator.hpp>
 #include <boost/interprocess/containers/string.hpp>
+
+#include <unistd.h>
 
 namespace bip = boost::interprocess;
 namespace shm
@@ -12,7 +13,7 @@ namespace shm
 
     typedef boost::lockfree::spsc_queue<
         shared_string, 
-        boost::lockfree::capacity<200> 
+        boost::lockfree::capacity<10000> 
     > ring_buffer;
 }
 
@@ -21,15 +22,24 @@ namespace shm
 int main()
 {
     // create segment and corresponding allocator
-    bip::managed_shared_memory segment(bip::open_or_create, "MySharedMemory", 65536);
+    bip::managed_shared_memory segment(bip::open_or_create, "MySharedMemory", 10000000);
     shm::char_alloc char_alloc(segment.get_segment_manager());
 
     shm::ring_buffer *queue = segment.find_or_construct<shm::ring_buffer>("queue")();
 
+    int i (0);
     while (true)
     {
         shm::shared_string v(char_alloc);
         if (queue->pop(v))
+        {
+            std::cout << "Processed: '" << i++ << "'\n";
             std::cout << "Processed: '" << v << "'\n";
+            usleep(100);
+        }
+        else 
+        {
+            std::cout << "Queue is empty..." << i++ << "'\n";
+        }
     }
 }
