@@ -1,5 +1,7 @@
 BasedOnStyle: LLVM
+BreakBeforeBraces: Allman
 IndentWidth: 4
+ColumnLimit: '150'
 PointerAlignment: Left
 AllowShortFunctionsOnASingleLine: Empty
 NamespaceIndentation: All
