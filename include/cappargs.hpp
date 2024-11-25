@@ -23,7 +23,15 @@ class CAppArgs
     {
     }
 
-    const int checkArgN(int argc)
+  private:
+    int argN;
+
+  public:
+    const std::string NetworkIniFileName;
+    const std::string CANopenMasterLibFileName;
+
+  private:
+    int checkArgN(int argc)
     {
         if (argc != 3)
         {
@@ -41,8 +49,4 @@ class CAppArgs
         }
         return std::string(arg); // TODO check argv[x] to correctness
     }
-
-    const int argN;
-    const std::string NetworkIniFileName;
-    const std::string CANopenMasterLibFileName;
 };
