@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(lesson_individual)
 
-add_executable(canapp canapp.cpp)
-add_executable(leading leading.cpp)
+add_executable(canapp canapp.cpp ccondvar.cpp)
+add_executable(leading leading.cpp ccondvar.cpp)
 
 target_include_directories(
     canapp PUBLIC
