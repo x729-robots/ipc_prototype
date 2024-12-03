@@ -21,7 +21,7 @@ int CCANopenMaster::testLibRealTimeTask(T_dummy_signals_dictionary_out* dummy_si
     // TODO made processing of res in below functions
     res = process_and_send_data(dummy_signals_dictionary_out); // обрабатываем то, что нам понаприходило из CAN-интерфейса
     res = process_and_recive_data(dummy_signals_dictionary_in); // отсылаем всё, что накопилось в CAN-интерфейс
-    const uint32_t MAX_EMULATE_EVENT1_N = 10;
+    const uint32_t MAX_EMULATE_EVENT1_N = 20;
 
     int test_echo_value = dummy_signals_dictionary_out->at(0).value; // zero element of dummy_signals_dictionary_out will be for demonstation
     for (uint32_t emulate_event1_n = 0; emulate_event1_n < MAX_EMULATE_EVENT1_N; emulate_event1_n++)
