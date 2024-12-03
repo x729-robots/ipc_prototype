@@ -25,5 +25,5 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 target_compile_options(
     canapp PRIVATE
-    -Wall -Wextra -pedantic -Werror
+    -Wall -Wextra -pedantic -Werror -Wno-unused-local-typedefs
 )

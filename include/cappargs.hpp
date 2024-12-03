@@ -8,8 +8,9 @@
  * @copyright Copyright (c) 2024
  *
  */
-
+#pragma once
 #include <iostream>
+#include "help.h"
 
 class CAppArgs
 {
