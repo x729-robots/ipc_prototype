@@ -1,11 +1,6 @@
 #include "ccondvar.h"
 #include <string>
 
-
-
-
-
-
 ccondvar::ccondvar(std::string leading_cv, std::string leading_cv_mutex)
 {
     pthread_mutexattr_init(&attrmutex);
@@ -76,11 +71,10 @@ ccondvar::ccondvar(std::string leading_cv, std::string leading_cv_mutex)
     pthread_cond_init(pcond, &attrcond);
 }
 
-//ccondvar::ccondvar(const std::string leading_cv, const std::string &leading_cv_mutex)
+// ccondvar::ccondvar(const std::string leading_cv, const std::string &leading_cv_mutex)
 //{
-//    ccondvar(const_cast<std::string> (leading_cv), const_cast<std::string> (leading_cv_mutex));
-//}
-
+//     ccondvar(const_cast<std::string> (leading_cv), const_cast<std::string> (leading_cv_mutex));
+// }
 
 ccondvar::~ccondvar()
 {
@@ -91,10 +85,10 @@ ccondvar::~ccondvar()
     pthread_condattr_destroy(&attrcond);
 }
 
-inline void ccondvar::signal2trailing()
+void ccondvar::signal2trailing()
 {
     pthread_mutex_lock(pmutex);
     pthread_cond_signal(pcond);
-    printf("son signaled\n");
+    printf("generate signal to trailing process\n");
     pthread_mutex_unlock(pmutex);
 }
