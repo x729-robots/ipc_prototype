@@ -20,6 +20,12 @@ set_target_properties(canapp PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON
 
 add_library(ccanopenmaster SHARED IMPORTED)
 
+#TODO made path relative
+execute_process (
+    COMMAND bash -c "cp /nvme0n1p4/home/chuv/git/LEARNING/OTUS_CPP/lesson_individual/canopenmaster/build/libccanopenmaster.so /nvme0n1p4/home/chuv/git/LEARNING/OTUS_CPP/lesson_individual/build/"
+    OUTPUT_VARIABLE outVar
+)
+
 set_property(TARGET ccanopenmaster PROPERTY
              IMPORTED_LOCATION "libccanopenmaster.so")
 
@@ -32,5 +38,5 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 target_compile_options(
     canapp PRIVATE
-    -Wall -Wextra -pedantic -Werror -Wno-unused-local-typedefs
+    -Wall -Wextra -pedantic -Werror -Wno-unused-local-typedefs -g
 )
