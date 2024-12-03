@@ -76,6 +76,19 @@ int main(int argc, char* argv[])
 
     pthread_cond_init(pcond, &attrcond);
 
+    // test leading signals to canapp thread
+    for (int i; i < 5; i++)
+    {
+        sleep(1);
+
+        pthread_mutex_lock(mutex);
+        pthread_cond_signal(condition);
+        printf("son signaled\n");
+        pthread_mutex_unlock(mutex);
+    }
+
+    //TODO подумать, что где забыл, привести в более красивый вид
+
     // освобождаем ресурсы
     pthread_mutex_destroy(pmutex);
     pthread_mutexattr_destroy(&attrmutex);
