@@ -20,6 +20,7 @@ class ccondvar
     pthread_condattr_t attrcond;
     std::string leading_cv;
     std::string leading_cv_mutex;
+    bool conditionSatisfied;
 
   public:
     ccondvar(std::string leading_cv, std::string leading_cv_mutex);

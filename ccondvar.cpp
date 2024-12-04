@@ -1,7 +1,7 @@
 #include "ccondvar.h"
 #include <string>
 
-ccondvar::ccondvar(std::string leading_cv, std::string leading_cv_mutex):leading_cv(leading_cv), leading_cv_mutex(leading_cv_mutex)
+ccondvar::ccondvar(std::string leading_cv, std::string leading_cv_mutex):leading_cv(leading_cv), leading_cv_mutex(leading_cv_mutex),conditionSatisfied(false)
 {
     pthread_mutexattr_init(&attrmutex);
 
@@ -84,21 +84,24 @@ ccondvar::~ccondvar()
     pthread_mutexattr_destroy(&attrmutex);
     pthread_cond_destroy(pcond);
     pthread_condattr_destroy(&attrcond);
-    shm_unlink(leading_cv_mutex.c_str());
-    shm_unlink(leading_cv.c_str());
+    //shm_unlink(leading_cv_mutex.c_str());
+    //shm_unlink(leading_cv.c_str());
 }
 
 void ccondvar::signal2trailing()
 {
     pthread_mutex_lock(pmutex);
+    conditionSatisfied = true;
     pthread_cond_signal(pcond);
-    printf("generate signal to trailing process\n");
+    printf("generate signal to trailing process\n"); //DEBUG
     pthread_mutex_unlock(pmutex);
 }
 
 void ccondvar::leader_signalwait()
 {
     pthread_mutex_lock(pmutex);
-    pthread_cond_wait(pcond, pmutex);
+    while(!conditionSatisfied)
+        pthread_cond_wait(pcond, pmutex);
+    conditionSatisfied = false;
     pthread_mutex_unlock(pmutex);
 }
