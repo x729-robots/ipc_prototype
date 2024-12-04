@@ -1,7 +1,7 @@
 #include "ccondvar.h"
 #include <string>
 
-ccondvar::ccondvar(std::string leading_cv, std::string leading_cv_mutex)
+ccondvar::ccondvar(std::string leading_cv, std::string leading_cv_mutex):leading_cv(leading_cv), leading_cv_mutex(leading_cv_mutex)
 {
     pthread_mutexattr_init(&attrmutex);
 
@@ -79,10 +79,13 @@ ccondvar::ccondvar(std::string leading_cv, std::string leading_cv_mutex)
 ccondvar::~ccondvar()
 {
     // освобождаем ресурсы
-    pthread_mutex_destroy(pmutex);
+    //TODO сделать мьютексы робастными (при падении разблокируются всегда)
+    pthread_mutex_destroy(pmutex); //TODO сделать освобождение мьютекса только из одного потока, а то как-то странно...
     pthread_mutexattr_destroy(&attrmutex);
     pthread_cond_destroy(pcond);
     pthread_condattr_destroy(&attrcond);
+    shm_unlink(leading_cv_mutex.c_str());
+    shm_unlink(leading_cv.c_str());
 }
 
 void ccondvar::signal2trailing()
@@ -90,5 +93,12 @@ void ccondvar::signal2trailing()
     pthread_mutex_lock(pmutex);
     pthread_cond_signal(pcond);
     printf("generate signal to trailing process\n");
+    pthread_mutex_unlock(pmutex);
+}
+
+void ccondvar::leader_signalwait()
+{
+    pthread_mutex_lock(pmutex);
+    pthread_cond_wait(pcond, pmutex);
     pthread_mutex_unlock(pmutex);
 }
